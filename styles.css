@@ -1,0 +1,22 @@
+
+
+#supports {
+    width:100%;
+}
+
+#supports canvas {
+    width:45%;
+    margin:0;
+    padding:0;
+    /*background-color: red;*/
+    float:left;
+}
+
+#supports canvas#support-domaine {
+    margin-right: 5%;
+}
+
+#function {
+    margin-top:10%;
+    font-size: 2em;
+}
