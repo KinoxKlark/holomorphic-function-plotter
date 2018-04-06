@@ -25,7 +25,9 @@
         </div>
 
         <div id="function">
-            $$f(z) = \frac{x^2-y^2}{x-1} + i \frac{2xy}{y-2}$$
+            <!-- $$f(z) = \frac{x^2-y^2}{x-1} + i \frac{2xy}{y-2}$$ -->
+            
+            $$f(z) = 2\ln(z+1)-z^3\frac{x+i}{3z}$$
             $$z = x+iy, \qquad x,y \in \mathbb R $$
         </div>
 
@@ -38,6 +40,146 @@
         });
     </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    <script src="js/complexe.js"></script>
+    <script src="js/utest-complexe.js"></script>
     <script src="js/scripts.js"></script>
+
+    <script>
+        var z = new Complexe(-1,2);
+        console.log(z);
+        console.log(z.module());
+        console.log(z.argument());
+
+        console.log(cplx);
+
+        // On aimerai créer la fonction
+        // f(z) = 2*ln(z+1) - z^3*(x+i)/(3z)
+
+        /*
+
+            f(z) se décompose en :
+
+            (-){
+                (*){
+                    2,
+                    ln(){
+                        +(){
+                            z,
+                            1
+                        },
+                        null
+                    }
+                },
+                (/){
+                    (*){
+                        pow(){
+                            z,
+                            3
+                        },
+                        (+){
+                            re(){
+                                z,
+                                null
+                            },
+                            i
+                        }
+                    },
+                    (*){
+                        3,
+                        z
+                    }
+                }
+            }
+
+
+        */
+
+        var g = cplx.z;
+        console.log(g.evaluate(z));
+
+
+        //*
+        // Construction de f(z)
+        f = cplx.minus(
+            cplx.times(
+                cplx.complexe(2,0),
+                cplx.ln(
+                    cplx.plus(
+                        cplx.z,
+                        cplx.complexe(1,0)
+                    )
+                    // pas de 2ème argument pour ln()
+                )
+            ),
+            cplx.frac(
+                cplx.times(
+                    cplx.pow(
+                        cplx.z,
+                        cplx.complexe(3,0)
+                    ),
+                    cplx.plus(
+                        cplx.re(
+                            cplx.z
+                            // pas de 2ème argument pour la partie réel
+                        ),
+                        cplx.complexe(0,1)
+                    )
+                ),
+                cplx.times(
+                    cplx.complexe(3,0),
+                    cplx.z
+                )
+            )
+        );
+
+        // Evaluation
+        var w = f.evaluate(z);
+        console.log(w);
+
+        //*/
+
+        // Ancienne fonction f(z)
+        /*
+        f = cplx.plus(
+            cplx.frac(
+                cplx.minus(
+                    cplx.pow(cplx.re(cplx.z), cplx.complexe(2,0)),
+                    cplx.pow(cplx.im(cplx.z), cplx.complexe(2,0))
+                ),
+                cplx.minus(
+                    cplx.re(cplx.z),
+                    cplx.complexe(1,0)
+                )
+            ),
+            cplx.frac(
+                cplx.times(
+                    cplx.complexe(2,0),
+                    cplx.times(cplx.re(cplx.z), cplx.im(cplx.z))
+                ),
+                cplx.minus(
+                    cplx.im(cplx.z),
+                    cplx.complexe(2,0)
+                )
+            )
+        );
+        //*/
+
+        // debug
+        /*
+        f = cplx.minus(
+            cplx.pow(cplx.re(cplx.z), cplx.complexe(2,0)),
+            cplx.pow(cplx.im(cplx.z), cplx.complexe(2,0))
+        );
+        //*/
+
+        var p = new Complexe(2,2);
+        console.log("debug");
+        console.log(f.evaluate(p));
+        console.log(toString(f.evaluate(p)))
+
+
+        function_to_draw = f;
+        draw(support_domaine);
+    </script>
 </body>
 </html>

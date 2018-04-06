@@ -2,10 +2,11 @@
 var support_domaine = getCanvas("support-domaine");
 var support_image = getCanvas("support-image");
 
+var function_to_draw = cplx.z;
+
 console.log(support_domaine);
 console.log(support_image);
 
-draw(support_domaine);
 
 /**
     Retourne un objet js qui encapsule le canvas et son contexte
@@ -61,14 +62,17 @@ function draw() {
 function drawDomaine() {
     var support = support_domaine;
 
-    drawColor(support, f= function(x,y) {
+    drawColor(support, function_to_draw);
+    /**
+    f = function(x,y) {
         var val = { x:0, y:0 };
 
         val.x = (x*x-y*y)/(x-1);
         val.y = (2*x*y)/(y-2);
 
         return val;
-    });
+    }
+    **/
     drawAxes(support);
 }
 
@@ -88,7 +92,7 @@ function drawAxes(support) {
     var line_width = 1.5*(2*support.view.scale/support.canvas.width);
     ctx.lineWidth = line_width;
 
-    console.log(top);
+    //console.log(top);
 
     // Axe imaginaire
     ctx.beginPath();
@@ -117,7 +121,6 @@ function drawAxes(support) {
             ctx.moveTo(current,-line_width*3);
             ctx.lineTo(current, line_width*3);
             current += 1;
-            console.log(current);
         }
     }
     ctx.stroke();
@@ -145,7 +148,7 @@ function drawAxes(support) {
 /**
     Dessine la roue de couleur selon la fonction f:C->C passée en paramètre
 */
-function drawColor(support, f = function(x,y){ return {x:x,y:y}; }) {
+function drawColor(support, f = cplx.z /*function(x,y){ return {x:x,y:y}; }*/) {
 
     var ctx = support.ctx;
     var pixels = ctx.getImageData(0,0, support.canvas.width,support.canvas.height);
@@ -163,7 +166,7 @@ function drawColor(support, f = function(x,y){ return {x:x,y:y}; }) {
         for(var y=0; y < pixels.height; y++)
         {
             var coord = supportCoordToComplexeCoord(x,y, support);
-            coord = f(coord.x, coord.y);
+            coord = f.evaluate(new Complexe(coord.x, coord.y));
             var color = getColorAtNumber(coord.x, coord.y);
             colorPixel(x,y, color.r, color.g , color.b);
         }
