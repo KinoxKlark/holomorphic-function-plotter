@@ -26,9 +26,12 @@
 
         <div id="function">
             <!-- $$f(z) = \frac{x^2-y^2}{x-1} + i \frac{2xy}{y-2}$$ -->
-            
-            $$f(z) = 2\ln(z+1)-z^3\frac{x+i}{3z}$$
+            <div id="function-display">
+                $$f(z) = 2\ln(z+1)-z^3\frac{x+i}{3z}$$
+            </div>
             $$z = x+iy, \qquad x,y \in \mathbb R $$
+
+            <textarea id="user-input" onkeyup="onUserInputFunction(this);">2\ln(z+1)-z^3\frac{x+i}{3z}</textarea>
         </div>
 
     </div>
@@ -45,6 +48,16 @@
     <script src="js/scripts.js"></script>
 
     <script>
+
+        function onUserInputFunction(textarea)
+        {
+            var display = document.getElementById("function-display");
+            display.innerHTML = "$$ f(z)="+textarea.value+"$$"
+
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        }
+
+
         var z = new Complexe(-1,2);
         console.log(z);
         console.log(z.module());
@@ -180,6 +193,9 @@
 
         function_to_draw = f;
         draw(support_domaine);
+
+        console.log(f);
+        console.log(f.toLatex())
     </script>
 </body>
 </html>

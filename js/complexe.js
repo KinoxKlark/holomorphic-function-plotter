@@ -59,15 +59,25 @@ Complexe.prototype.argument = function() {
 
 var cplx = function(){
 
+    var PriorityEnum = {
+        NONE = 0,
+        ADDITION_SUBSTRACTION = 1,
+        MULTIPLICATION_DIVISION = 2,
+        EXPONENT = 3,
+        PARENTHESIS_FUNCTION = 4
+    };
+
     return {
         // Numbers
         z: function(){
             return {
+                toLatex: function(priority = 0) { return "z"; },
                 evaluate: function(z) { return z; }
             };
         }(),
         i: function(){
             return {
+                toLatex: function(priority = 0) { return "i"; },
                 evaluate: function(z) {
                     return new Complexe(0,1);
                 }
@@ -75,6 +85,15 @@ var cplx = function(){
         }(),
         complexe: function(x, y){
             return {
+                toLatex: function(priority = 0) {
+                    var str = "";
+                    if(x != 0)
+                        str += x;
+                    if(x != 0 && y != 0)
+                        str += (y > 0) ? "+" : "-";
+                    str += y != 0 ? (Math.abs(y) != 1 ? Math.abs(y) : "")+"i" : "";
+                    return str;
+                },
                 evaluate: function(z) {
                     return new Complexe(x,y);
                 }
@@ -84,6 +103,7 @@ var cplx = function(){
         // Operations
         plus: function(left, right) {
             return {
+                toLatex: function(priority = 0) { return left.toLatex(PriorityEnum.ADDITION_SUBSTRACTION)+"+"+right.toLatex(PriorityEnum.ADDITION_SUBSTRACTION); },
                 // Opérateur +
                 evaluate: function(z) {
                     var zLeft = left.evaluate(z);
@@ -94,6 +114,7 @@ var cplx = function(){
         },
         minus: function(left, right){
             return {
+                toLatex: function(priority = 0) { return left.toLatex(PriorityEnum.ADDITION_SUBSTRACTION)+"-"+right.toLatex(PriorityEnum.ADDITION_SUBSTRACTION); },
                 // Opérateur -
                 evaluate: function(z) {
                     var zLeft = left.evaluate(z);
@@ -104,6 +125,7 @@ var cplx = function(){
         },
         times: function(left, right){
             return {
+                toLatex: function(priority = 0) { return left.toLatex(PriorityEnum.MULTIPLICATION_DIVISION)+"  "+right.toLatex(PriorityEnum.MULTIPLICATION_DIVISION); },
                 // Opérateur *
                 evaluate: function(z) {
                     var zLeft = left.evaluate(z);
@@ -117,6 +139,7 @@ var cplx = function(){
         },
         frac: function(numerator, denominator){
             return {
+                toLatex: function(priority = 0) { return "\\frac{"+numerator.toLatex(PriorityEnum.NONE)+"}{"+denominator.toLatex(PriorityEnum.NONE)+"}"; },
                 // Opérateur a / b
                 evaluate: function(z) {
                     var num = numerator.evaluate(z);
@@ -131,6 +154,7 @@ var cplx = function(){
         },
         pow: function(number, exponent){
             return {
+                toLatex: function(priority = 0) { return number.toLatex(PriorityEnum.NONE)+"^{"+exponent.toLatex(PriorityEnum.NONE)+"}"; },
                 // Opérateur a^b
                 evaluate: function(z) {
                     var num = number.evaluate(z);
@@ -164,6 +188,7 @@ var cplx = function(){
         // Functions
         re: function(expr){
             return {
+                toLatex: function(priority = 0) { return "\\Re\\left({"+expr.toLatex()+"}\\right)" },
                 // Fonction Re(z) : partie réel
                 evaluate: function(z){
                     var zExpr = expr.evaluate(z);
@@ -173,6 +198,7 @@ var cplx = function(){
         },
         im: function(expr){
             return {
+                toLatex: function(priority = 0) { return "\\Im\\left({"+expr.toLatex()+"}\\right)" },
                 // Fonction Im(z) : partie imaginaire
                 evaluate: function(z){
                     var zExpr = expr.evaluate(z);
@@ -185,6 +211,7 @@ var cplx = function(){
         },
         module: function(expr){
             return {
+                toLatex: function(priority = 0) { return "\\left|"+expr.toLatex()+"\\right|" },
                 // Fonction |z| : module de z
                 evaluate: function(z){
                     var zExpr = expr.evaluate(z);
@@ -194,6 +221,7 @@ var cplx = function(){
         },
         argument: function(expr){
             return {
+                toLatex: function(priority = 0) { return "\\text{arg}\\left({"+expr.toLatex()+"}\\right)" },
                 // Fonction arg(z) : argument de z
                 evaluate: function(z){
                     var zExpr = expr.evaluate(z);
@@ -203,6 +231,7 @@ var cplx = function(){
         },
         conjuge: function(expr){
             return {
+                toLatex: function(priority = 0) { return "\\overline{"+expr.toLatex()+"}" },
                 // Fonction z = x+iy -> x - iy : complexe conugué
                 evaluate: function(z){
                     var zExpr = expr.evaluate(z);
@@ -212,6 +241,7 @@ var cplx = function(){
         },
         ln: function(expr){
             return {
+                toLatex: function(priority = 0) { return "\\ln\\left({"+expr.toLatex()+"}\\right)" },
                 // Fonction ln(z) : logarithme neperien
                 evaluate: function(z){
                     var zExpr = expr.evaluate(z);
